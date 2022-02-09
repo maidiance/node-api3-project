@@ -34,7 +34,7 @@ router.post('/', validateUser, (req, res) => {
       res.status(201).json(user);
     })
     .catch(() => {
-      res.status(500);
+      res.status(500).json({message: 'failed to insert user'});
     })
 });
 
@@ -95,7 +95,12 @@ router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // RETURN THE NEWLY CREATED USER POST
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
-  Posts.insert(req.body)
+  const { id } = req.params;
+  const newPost = {
+    user_id: id,
+    ...req.body
+  }
+  Posts.insert(newPost)
     .then(post => {
       res.status(201).json(post);
     })
