@@ -16,12 +16,17 @@ function validateUserId(req, res, next) {
       next();
     })
     .catch(() => {
-      res.status(404).json({ message: 'user not found'});
+      res.status(404).json({message: 'user not found'});
     })
 }
 
 function validateUser(req, res, next) {
   // DO YOUR MAGIC
+  if(!req.body.name) {
+    res.status(400).json({message: 'missing required name field'});
+  } else {
+    next();
+  }
 }
 
 function validatePost(req, res, next) {
