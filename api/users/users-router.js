@@ -65,6 +65,15 @@ router.delete('/:id', validateUserId, (req, res) => {
 router.get('/:id/posts', validateUserId, (req, res) => {
   // RETURN THE ARRAY OF USER POSTS
   // this needs a middleware to verify user id
+  const { id } = req.params;
+  Users.getUserPosts(id)
+    .then(posts => {
+      if(posts == null || posts.length === 0){
+        res.status(404).json({message: 'no posts found'});
+      } else {
+        res.json(posts);
+      }
+    })
 });
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
