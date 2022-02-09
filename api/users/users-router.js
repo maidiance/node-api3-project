@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
   // RETURN AN ARRAY WITH ALL THE USERS
   Users.get()
     .then(users => {
+      console.log(users);
       res.status(200).json(users);
     })
     .catch(() => {
