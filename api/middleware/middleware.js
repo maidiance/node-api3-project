@@ -12,11 +12,12 @@ function validateUserId(req, res, next) {
   const id = req.params.id;
   Users.getById(id)
     .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(() => {
-      res.status(404).json({message: 'user not found'});
+      if(!user){
+        res.status(404).json({message: 'user not found'});
+      } else {
+        req.user = user;
+        next();
+      }
     })
 }
 
