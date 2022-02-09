@@ -33,6 +33,9 @@ router.post('/', validateUser, (req, res) => {
     .then(user => {
       res.status(201).json(user);
     })
+    .catch(() => {
+      res.status(500);
+    })
 });
 
 router.put('/:id', validateUserId, validateUser, (req, res) => {
@@ -42,6 +45,9 @@ router.put('/:id', validateUserId, validateUser, (req, res) => {
   Users.update(req.params.id, req.body)
     .then(user => {
       res.status(200).json(user);
+    })
+    .catch(() => {
+      res.status(500).json({message: 'failed to update user'});
     })
 });
 
@@ -54,11 +60,17 @@ router.delete('/:id', validateUserId, (req, res) => {
     .then(user => {
       toDelete = user;
     })
+    .catch(() => {
+      res.status(500).json({message: 'failed to get user'});
+    })
   Users.remove(req.params.id)
     .then(count => {
       if(count > 0) {
         res.status(200).json(toDelete);
       }
+    })
+    .catch(() => {
+      res.status(500).json({message: 'failed to remove user'});
     })
 });
 
@@ -74,12 +86,22 @@ router.get('/:id/posts', validateUserId, (req, res) => {
         res.json(posts);
       }
     })
+    .catch(() => {
+      res.status(500).json({message: 'failed to get post'});
+    })
 });
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // RETURN THE NEWLY CREATED USER POST
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  Posts.insert(req.body)
+    .then(post => {
+      res.status(201).json(post);
+    })
+    .catch(() => {   
+      res.status(500).json({message: 'failed to post'});
+    })
 });
 
 // do not forget to export the router
