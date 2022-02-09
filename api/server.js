@@ -1,8 +1,9 @@
 const express = require('express');
-const logger = require('morgan');
 const server = express();
 
-server.use(logger('dev'));
+const { logger } = require('./middleware/middleware');
+
+server.use(logger);
 // remember express by default cannot parse JSON in request bodies
 server.use(express.json());
 
